@@ -6,12 +6,18 @@ from covid_simulation.covid_agent import CovidAgent
 
 
 class CovidModel(Model):
+    """
+    initialize the model with N agents, of which M agents are infected initially
+    add all the agents in the agent_list for function position_agent
+    """
+
     def __init__(self, N, M, width, height):
         super().__init__()
         self.agent_number = N
         self.initial_infected = M
         self.grid = SingleGrid(width, height, True)
         self.schedule = RandomActivation(self)
+        self.running = True
         self.agent_list = []
 
         for i in range(self.initial_infected):
@@ -25,6 +31,7 @@ class CovidModel(Model):
             self.agent_list.append(healthy_agent)
 
         for agent in self.agent_list:
+            # for SingleGrid use position_agent to place them the first time
             self.grid.position_agent(agent)
 
     def step(self):

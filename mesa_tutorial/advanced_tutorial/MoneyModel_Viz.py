@@ -19,6 +19,7 @@ class HistogramModule(VisualizationElement):
     local_includes = ["HistogramModule.js"]
 
     def __init__(self, bins, canvas_height, canvas_width):
+        super().__init__()
         self.canvas_height = canvas_height
         self.canvas_width = canvas_width
         self.bins = bins

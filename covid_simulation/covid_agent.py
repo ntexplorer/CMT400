@@ -8,11 +8,12 @@ from covid_simulation import const
 
 class CovidAgent(Agent):
     # each agent has an unique ID, and a status of whether it is infected
-    def __init__(self, unique_id, model, is_infected):
+    def __init__(self, unique_id, model, is_infected: bool, wear_mask: bool):
         super().__init__(unique_id, model)
         # agents age from 0 to 89
         self.age = self.random.randint(0, 89)
         self.is_infected = is_infected
+        self.wear_mask = wear_mask
         self.infection_trigger = False
         self.incubation = 0
         self.symptomatic = 0
@@ -30,7 +31,6 @@ class CovidAgent(Agent):
             self.infection_end()
 
     def move(self):
-        global new_position
         # find all the possible steps and if it's empty them append it into a list
         all_steps = self.model.grid.get_neighborhood(self.pos, moore=True,
                                                      include_center=False)
@@ -52,15 +52,24 @@ class CovidAgent(Agent):
 
     def pass_covid(self):
         # find all the cellmates near the agent
-        cellmates = self.model.grid.get_cell_list_contents([self.pos])
-        # if the agent is infected then it has a possibility to pass the virus to all the neighborhood agents
-        if self.is_infected:
-            for cellmate in cellmates:
-                # generate a number between 0 and 100
-                pass_probability = self.random.randint(0, 100)
-                # compare the number to the pass probability set, if the neighbor agent doesn't have immunity
-                if pass_probability <= (const.PASS_PROBABILITY * 100) and not cellmate.has_immunity:
-                    cellmate.is_infected = True
+        cellmates = self.model.grid.get_neighbors(self.pos, True)
+        for cellmate in cellmates:
+            if not cellmate.has_immunity:
+                pass_probability = self.random.randint(0, 1000)
+                if self.is_infected and not self.wear_mask:
+                    if not cellmate.wear_mask:
+                        if pass_probability <= (const.PASS_PR_BOTH_OFF * 1000):
+                            cellmate.is_infected = True
+                    else:
+                        if pass_probability <= (const.PASS_PR_CONTACT_ON * 1000):
+                            cellmate.is_infected = True
+                elif self.is_infected and self.wear_mask:
+                    if not cellmate.wear_mask:
+                        if pass_probability <= (const.PASS_PR_CARRIER_ON * 1000):
+                            cellmate.is_infected = True
+                    else:
+                        if pass_probability <= (const.PASS_PR_BOTH_ON * 1000):
+                            cellmate.is_infected = True
 
     def get_infected(self):
         # infection trigger is to prevent from multiple info update
@@ -84,6 +93,7 @@ class CovidAgent(Agent):
                 self.is_infected = False
                 # remove the agent from the grid
                 self.model.grid.remove_agent(self)
+                self.model.schedule.remove(self)
                 # FOR DEBUG USAGE
                 # print("***\nAgent " + str(self.unique_id) + " is dead and removed!\n***")
                 self.infection_countdown = -1

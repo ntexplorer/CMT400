@@ -56,7 +56,7 @@ class CovidModel(Model):
                              "Immune": compute_immune,
                              "Healthy": compute_healthy_agent,
                              "Infected": compute_infection,
-                             "Hospital Capacity": compute_hospital_treated}
+                             "Hospital Occupation": compute_hospital_treated}
         )
 
     def step(self):

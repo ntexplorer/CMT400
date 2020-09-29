@@ -41,16 +41,12 @@ class CovidAgent(Agent):
             self.infection_end()
 
     def hospital_treatment(self):
-        if default_setting.getboolean('active_hospital'):
-            if self.has_symptom and self.model.hospital_occupation <= \
+        if default_setting.getboolean('activate_hospital'):
+            if self.has_symptom and self.model.hospital_occupation < \
                     self.model.hospital_capacity and not self.in_hospital:
                 self.model.grid.remove_agent(self)
                 self.model.hospital_occupation += 1
                 self.in_hospital = True
-            if self.has_immunity and self.in_hospital:
-                self.model.grid.position_agent(self)
-                self.in_hospital = False
-                self.model.hospital_occupation -= 1
 
     def move(self):
         if not self.in_hospital:
@@ -123,6 +119,7 @@ class CovidAgent(Agent):
             if self.fatality_rate >= self.random.randint(0, 1000):
                 self.is_dead = True
                 self.is_infected = False
+                self.has_symptom = False
                 # remove the agent from the grid and the schedule
                 if not self.in_hospital:
                     self.model.grid.remove_agent(self)
@@ -135,5 +132,10 @@ class CovidAgent(Agent):
                 self.infection_countdown = -1
             else:
                 self.has_immunity = True
+                if self.in_hospital:
+                    self.model.grid.position_agent(self)
+                    self.in_hospital = False
+                    self.model.hospital_occupation -= 1
                 self.is_infected = False
+                self.has_symptom = False
                 self.infection_countdown = -1

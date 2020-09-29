@@ -44,7 +44,7 @@ chart = ChartModule([{"Label": "Fatalities", "Color": "Black"},
                      {"Label": "Immune", "Color": "Blue"},
                      {"Label": "Healthy", "Color": "Green"},
                      {"Label": "Infected", "Color": "Orange"},
-                     {"Label": "Hospital Capacity", "Color": "Yellow"}],
+                     {"Label": "Hospital Occupation", "Color": "Yellow"}],
                     data_collector_name='data_collector')
 server = ModularServer(CovidModel,
                        [grid, chart],

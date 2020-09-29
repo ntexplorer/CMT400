@@ -2,8 +2,8 @@ import configparser
 
 config = configparser.ConfigParser()
 config['DEFAULT'] = {
-    "active_hospital": "true",
-    "active_social_distancing": '0'
+    "activate_hospital": "true",
+    "activate_social_distancing": '0'
 }
 config['covid_model'] = {
     "; Number of agents\n"

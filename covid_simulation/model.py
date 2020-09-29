@@ -4,21 +4,24 @@ from mesa.space import SingleGrid
 from mesa.time import RandomActivation
 
 from covid_simulation.covid_agent import CovidAgent
-from covid_simulation.data_compute import compute_fatality_rate
+from covid_simulation.data_compute import *
 
 
 class CovidModel(Model):
     """
     initialize the model with N agents, of which M agents are infected initially
+    Parameter J and K for numbers of agents who wears face masks;
     add all the agents in the agent_list for function position_agent
     """
 
-    def __init__(self, N, M, J, K, width, height):
+    def __init__(self, N: int, M: int, J: int, K: int, L: int, width, height):
         super().__init__()
         self.agent_number = N
         self.initial_infected = M
         self.healthy_with_mask = J
         self.carrier_with_mask = K
+        self.hospital_capacity = L
+        self.hospital_occupation = 0
         self.grid = SingleGrid(width, height, True)
         self.schedule = RandomActivation(self)
         self.running = True
@@ -49,7 +52,11 @@ class CovidModel(Model):
             self.grid.position_agent(agent)
 
         self.data_collector = DataCollector(
-            model_reporters={"Fatality Rate": compute_fatality_rate}
+            model_reporters={"Fatalities": compute_fatalities,
+                             "Immune": compute_immune,
+                             "Healthy": compute_healthy_agent,
+                             "Infected": compute_infection,
+                             "Hospital Capacity": compute_hospital_treated}
         )
 
     def step(self):

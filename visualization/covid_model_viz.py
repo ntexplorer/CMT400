@@ -1,23 +1,36 @@
+import configparser
+
 from mesa.visualization.ModularVisualization import ModularServer
 from mesa.visualization.modules import CanvasGrid
 from mesa.visualization.modules import ChartModule
 
 from covid_simulation.model import CovidModel
 
+config = configparser.ConfigParser()
+config.read('../covid_simulation/config.ini')
+covid_model = config['covid_model']
+hospital_capacity = config['hospital_capacity']
 
-# The server can only run under python 3.7!
+
+# The server can only run under python 3.7.x
+# The ModularServer doesn't support two models running in one server
+
 def agent_portrayal(agent):
     portrayal = {
         "Filled": "true",
         "Layer": 0,
-        "r": 0.5
     }
     if agent.has_immunity:
         portrayal["Shape"] = "immune.png"
-    elif agent.is_infected and not agent.wear_mask:
-        portrayal["Shape"] = "infected_without_mask.png"
-    elif agent.is_infected and agent.wear_mask:
-        portrayal["Shape"] = "infected_mask.png"
+    elif agent.is_infected and not agent.has_symptom and not agent.wear_mask:
+        portrayal["Shape"] = "incubation_without_mask.png"
+    elif agent.is_infected and not agent.has_symptom and agent.wear_mask:
+        portrayal["Shape"] = "incubation_mask.png"
+    elif agent.is_infected and agent.has_symptom and not agent.wear_mask:
+        portrayal["Shape"] = "symptomatic_without_mask.png"
+    elif agent.is_infected and agent.has_symptom and agent.wear_mask:
+        portrayal["Shape"] = "symptomatic_mask.png"
+
     elif not agent.is_infected and agent.wear_mask:
         portrayal["Shape"] = "healthy_mask.png"
     else:
@@ -25,12 +38,21 @@ def agent_portrayal(agent):
     return portrayal
 
 
-grid = CanvasGrid(agent_portrayal, 15, 15, 500, 500)
-chart = ChartModule([{"Label": "Fatality Rate", "Color": "Black"}],
+grid = CanvasGrid(agent_portrayal, int(covid_model['width']), int(covid_model['height']), 500, 500)
+
+chart = ChartModule([{"Label": "Fatalities", "Color": "Black"},
+                     {"Label": "Immune", "Color": "Blue"},
+                     {"Label": "Healthy", "Color": "Green"},
+                     {"Label": "Infected", "Color": "Orange"},
+                     {"Label": "Hospital Capacity", "Color": "Yellow"}],
                     data_collector_name='data_collector')
 server = ModularServer(CovidModel,
                        [grid, chart],
-                       "COVID Model",
-                       {"N": 60, "M": 5, "J": 1, "K": 2, "width": 15, "height": 15})
+                       "COVID Model Simulation",
+                       {"N": int(covid_model['N']), "M": int(covid_model['M']),
+                        "J": int(covid_model['J']), "K": int(covid_model['K']),
+                        "L": int(hospital_capacity["L"]),
+                        "width": int(covid_model['width']),
+                        "height": int(covid_model['height'])})
 server.port = 8521  # The default
 server.launch()

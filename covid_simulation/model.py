@@ -78,28 +78,39 @@ class CovidModel(Model):
         self.schedule.step()
 
     def auto_quarantine_get_symptomatic_rate(self):
+        # if the agent has symptom, append it to the list
         self.symptomatic_list = []
         for agent in self.agent_list:
             if agent.has_symptom:
                 self.symptomatic_list.append(agent)
+        # then calculate the symptomatic_rate
         self.symptomatic_rate = len(self.symptomatic_list) / len(self.agent_list)
 
     def auto_quarantine_update_quarantine_list(self):
+        # get number of agents who need to be self-isolated for both quarantine level
         self.quarantined_agent_length_1 = round(len(self.agent_list) * float(quarantine_rate["1"]))
         self.quarantined_agent_length_2 = round(len(self.agent_list) * float(quarantine_rate["2"]))
+        # level 1
         if float(quarantine_threshold['level_1_threshold']) <= self.symptomatic_rate < float(
                 quarantine_threshold['level_2_threshold']) and self.quarantine_toggle != 1:
             self.auto_quarantine_reset_quarantine_list()
+            # pick random agents (number set by lvl 1) to stay still
             self.quarantine_list = self.random.sample(self.agent_list, self.quarantined_agent_length_1)
+            # set the toggle to 1
             self.quarantine_toggle = 1
+        # level 2
         elif float(quarantine_threshold['level_2_threshold']) <= self.symptomatic_rate and self.quarantine_toggle != 2:
             self.auto_quarantine_reset_quarantine_list()
+            # pick random agents (number set by lvl 2) to stay still
             self.quarantine_list = self.random.sample(self.agent_list, self.quarantined_agent_length_2)
+            # set the toggle to 2
             self.quarantine_toggle = 2
         elif float(quarantine_threshold['level_1_threshold']) > self.symptomatic_rate and self.quarantine_toggle != 0:
             self.auto_quarantine_reset_quarantine_list()
+            # at lvl 0 no one needs to self-isolate
             self.quarantine_list = []
             self.quarantine_toggle = 0
+        # all the agents in the list to stay still
         for agent in self.quarantine_list:
             agent.social_distancing_toggle = True
 

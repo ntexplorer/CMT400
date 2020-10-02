@@ -2,8 +2,11 @@ import configparser
 
 config = configparser.ConfigParser()
 config['DEFAULT'] = {
+    "; Toggle to activate hospital\n"
     "activate_hospital": "false",
+    "; If auto mode is off, set the social-distancing level below (0-2) manually\n"
     "manual_social_distancing_lvl": '2',
+    "; Toggle to activate auto-social-distancing\n"
     "activate_automatic_mode": "true"
 }
 config['covid_model'] = {
@@ -81,12 +84,14 @@ config['immunity_loss'] = {
 }
 
 config['quarantine_rate'] = {
+    "; The ratio of people who need to self-isolate\n"
     '0': '0',
     '1': '0.6',
     '2': '0.9',
 }
 
 config['quarantine_threshold'] = {
+    "; The threshold of the ratio of agents to start social-distancing policy"
     'level_1_threshold': '0.05',
     'level_2_threshold': '0.1',
 }

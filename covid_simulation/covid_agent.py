@@ -37,6 +37,7 @@ class CovidAgent(Agent):
         self.social_distancing_toggle = False
 
     def step(self) -> None:
+        # if the agent is not dead then proceed steps
         if not self.is_dead:
             self.hospital_treatment()
             self.check_quarantine_status()
@@ -49,6 +50,7 @@ class CovidAgent(Agent):
             self.immunity_loss_check()
             self.immunity_loss()
 
+    # check if auto quarantine change mode is on, if not switch to manual mode
     def check_quarantine_status(self):
         if default_setting.getboolean('activate_automatic_mode'):
             self.model.auto_quarantine_get_symptomatic_rate()
@@ -56,10 +58,13 @@ class CovidAgent(Agent):
         else:
             self.model.manual_quarantine()
 
+    # check if hospital mode is on
     def hospital_treatment(self):
         if default_setting.getboolean('activate_hospital'):
+            # if the agent is symptomatic and there's still room in the hospital and it's not in it
             if self.has_symptom and self.model.hospital_occupation < \
                     self.model.hospital_capacity and not self.in_hospital:
+                # remove the agent from the grid
                 self.model.grid.remove_agent(self)
                 self.model.hospital_occupation += 1
                 self.in_hospital = True
@@ -133,32 +138,41 @@ class CovidAgent(Agent):
         if self.infection_countdown == 0:
             self.fatality_rate = float(fatality_rate[str(math.floor(self.age / 10))]) * 1000
             if self.fatality_rate >= self.random.randint(0, 1000):
+                # the agent dies
                 self.is_dead = True
                 self.is_infected = False
                 self.has_symptom = False
-                # remove the agent from the grid and the schedule
                 if not self.in_hospital:
+                    # if it's not in the hospital then remove it from the grid
                     self.model.grid.remove_agent(self)
                 else:
+                    # if in the hospital then remove it from the hospital
                     self.in_hospital = False
                     self.model.hospital_occupation -= 1
+                # remove the agent from the schedule
                 self.model.schedule.remove(self)
                 # FOR DEBUG USAGE
                 # print("***\nAgent " + str(self.unique_id) + " is dead and removed!\n***")
                 self.infection_countdown = -1
             else:
+                # the agent got immunity
                 self.has_immunity = True
+                # if it recovers in the hospital, place it back to the grid
                 if self.in_hospital:
                     self.model.grid.position_agent(self)
                     self.in_hospital = False
                     self.model.hospital_occupation -= 1
+                # reset the status
                 self.is_infected = False
                 self.has_symptom = False
                 self.infection_countdown = -1
 
     def immunity_loss_check(self):
+        # if the agent has immunity and not been checked yet
         if self.has_immunity and not self.immunity_loss_toggle:
+            # turn on the toggle to prevent multiple check
             self.immunity_loss_toggle = True
+            # get the probability of losing immunity
             self.immunity_loss_rate = float(immunity_loss['IMMUNITY_LOSS_PR']) * 1000
             if self.random.randint(0, 1000) <= self.immunity_loss_rate:
                 self.immunity_countdown = self.random.randint(int(immunity_loss['IMMUNITY_LOSS_MIN']),
@@ -167,6 +181,7 @@ class CovidAgent(Agent):
     def immunity_loss(self):
         if self.immunity_loss_toggle and self.immunity_countdown > 0:
             self.immunity_countdown -= 1
+        # when the countdown reaches 0, reset the agent to a healthy one without immunity
         elif self.immunity_loss_toggle and self.immunity_countdown == 0:
             self.immunity_countdown = -1
             self.has_immunity = False

@@ -11,6 +11,7 @@ pass_probability = config['pass_probability']
 incubation = config['incubation']
 symptomatic = config['symptomatic']
 fatality_rate = config['fatality_rate']
+immunity_loss = config['immunity_loss']
 
 
 class CovidAgent(Agent):
@@ -23,22 +24,37 @@ class CovidAgent(Agent):
         self.wear_mask = wear_mask
         self.has_symptom = False
         self.in_hospital = False
-        self.infection_trigger = False
+        self.infection_toggle = False
         self.incubation_count = 0
         self.symptomatic_count = 0
         self.infection_countdown = -1
         self.has_immunity = False
         self.is_dead = False
         self.fatality_rate = 0
+        self.immunity_loss_rate = 0
+        self.immunity_countdown = -1
+        self.immunity_loss_toggle = False
+        self.social_distancing_toggle = False
 
     def step(self) -> None:
         if not self.is_dead:
             self.hospital_treatment()
-            self.move()
+            self.check_quarantine_status()
+            if not self.social_distancing_toggle:
+                self.move()
             self.pass_covid()
             self.get_infected()
             self.infection_count()
             self.infection_end()
+            self.immunity_loss_check()
+            self.immunity_loss()
+
+    def check_quarantine_status(self):
+        if default_setting.getboolean('activate_automatic_mode'):
+            self.model.auto_quarantine_get_symptomatic_rate()
+            self.model.auto_quarantine_update_quarantine_list()
+        else:
+            self.model.manual_quarantine()
 
     def hospital_treatment(self):
         if default_setting.getboolean('activate_hospital'):
@@ -96,14 +112,14 @@ class CovidAgent(Agent):
                                 cellmate.is_infected = True
 
     def get_infected(self):
-        # infection trigger is to prevent from multiple info update
-        if self.is_infected and not self.infection_trigger:
+        # infection toggle is to prevent from multiple info update
+        if self.is_infected and not self.infection_toggle:
             self.incubation_count = self.random.randint(int(incubation['INCUBATION_MIN']),
                                                         int(incubation['INCUBATION_MAX']))
             self.symptomatic_count = self.random.randint(int(symptomatic['SYMPTOMATIC_MIN']),
                                                          int(symptomatic['SYMPTOMATIC_MAX']))
             self.infection_countdown = self.incubation_count + self.symptomatic_count
-            self.infection_trigger = True
+            self.infection_toggle = True
 
     def infection_count(self):
         # every step the agent moves the countdown goes down by 1
@@ -139,3 +155,20 @@ class CovidAgent(Agent):
                 self.is_infected = False
                 self.has_symptom = False
                 self.infection_countdown = -1
+
+    def immunity_loss_check(self):
+        if self.has_immunity and not self.immunity_loss_toggle:
+            self.immunity_loss_toggle = True
+            self.immunity_loss_rate = float(immunity_loss['IMMUNITY_LOSS_PR']) * 1000
+            if self.random.randint(0, 1000) <= self.immunity_loss_rate:
+                self.immunity_countdown = self.random.randint(int(immunity_loss['IMMUNITY_LOSS_MIN']),
+                                                              int(immunity_loss['IMMUNITY_LOSS_MAX']))
+
+    def immunity_loss(self):
+        if self.immunity_loss_toggle and self.immunity_countdown > 0:
+            self.immunity_countdown -= 1
+        elif self.immunity_loss_toggle and self.immunity_countdown == 0:
+            self.immunity_countdown = -1
+            self.has_immunity = False
+            self.infection_toggle = False
+            self.immunity_loss_toggle = False

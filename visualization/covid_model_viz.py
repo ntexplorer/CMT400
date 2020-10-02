@@ -38,7 +38,7 @@ def agent_portrayal(agent):
     return portrayal
 
 
-grid = CanvasGrid(agent_portrayal, int(covid_model['width']), int(covid_model['height']), 500, 500)
+grid = CanvasGrid(agent_portrayal, int(covid_model['width']), int(covid_model['height']), 800, 800)
 
 chart = ChartModule([{"Label": "Fatalities", "Color": "Black"},
                      {"Label": "Immune", "Color": "Blue"},

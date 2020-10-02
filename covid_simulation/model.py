@@ -1,3 +1,5 @@
+import configparser
+
 from mesa import Model
 from mesa.datacollection import DataCollector
 from mesa.space import SingleGrid
@@ -5,6 +7,12 @@ from mesa.time import RandomActivation
 
 from covid_simulation.covid_agent import CovidAgent
 from covid_simulation.data_compute import *
+
+config = configparser.ConfigParser()
+config.read('../covid_simulation/config.ini')
+default_setting = config['DEFAULT']
+quarantine_rate = config['quarantine_rate']
+quarantine_threshold = config['quarantine_threshold']
 
 
 class CovidModel(Model):
@@ -26,6 +34,12 @@ class CovidModel(Model):
         self.schedule = RandomActivation(self)
         self.running = True
         self.agent_list = []
+        self.symptomatic_list = []
+        self.symptomatic_rate = 0
+        self.quarantine_toggle = 0
+        self.quarantine_list = []
+        self.quarantined_agent_length_1 = 0
+        self.quarantined_agent_length_2 = 0
 
         for i in range(self.carrier_with_mask):
             infected_with_mask = CovidAgent(i, self, True, True)
@@ -62,3 +76,42 @@ class CovidModel(Model):
     def step(self):
         self.data_collector.collect(self)
         self.schedule.step()
+
+    def auto_quarantine_get_symptomatic_rate(self):
+        self.symptomatic_list = []
+        for agent in self.agent_list:
+            if agent.has_symptom:
+                self.symptomatic_list.append(agent)
+        self.symptomatic_rate = len(self.symptomatic_list) / len(self.agent_list)
+
+    def auto_quarantine_update_quarantine_list(self):
+        self.quarantined_agent_length_1 = round(len(self.agent_list) * float(quarantine_rate["1"]))
+        self.quarantined_agent_length_2 = round(len(self.agent_list) * float(quarantine_rate["2"]))
+        if float(quarantine_threshold['level_1_threshold']) <= self.symptomatic_rate < float(
+                quarantine_threshold['level_2_threshold']) and self.quarantine_toggle != 1:
+            self.auto_quarantine_reset_quarantine_list()
+            self.quarantine_list = self.random.sample(self.agent_list, self.quarantined_agent_length_1)
+            self.quarantine_toggle = 1
+        elif float(quarantine_threshold['level_2_threshold']) <= self.symptomatic_rate and self.quarantine_toggle != 2:
+            self.auto_quarantine_reset_quarantine_list()
+            self.quarantine_list = self.random.sample(self.agent_list, self.quarantined_agent_length_2)
+            self.quarantine_toggle = 2
+        elif float(quarantine_threshold['level_1_threshold']) > self.symptomatic_rate and self.quarantine_toggle != 0:
+            self.auto_quarantine_reset_quarantine_list()
+            self.quarantine_list = []
+            self.quarantine_toggle = 0
+        for agent in self.quarantine_list:
+            agent.social_distancing_toggle = True
+
+    def auto_quarantine_reset_quarantine_list(self):
+        for agent in self.agent_list:
+            agent.social_distancing_toggle = False
+
+    def manual_quarantine(self):
+        if not self.quarantine_toggle:
+            self.quarantine_toggle = 1
+            quarantined_agent_length = round(len(self.agent_list)
+                                             * float(quarantine_rate[default_setting["manual_social_distancing_lvl"]]))
+            self.quarantine_list = self.random.sample(self.agent_list, quarantined_agent_length)
+            for agent in self.quarantine_list:
+                agent.social_distancing_toggle = True

@@ -2,12 +2,13 @@ import configparser
 
 config = configparser.ConfigParser()
 config['DEFAULT'] = {
-    "activate_hospital": "true",
-    "activate_social_distancing": '0'
+    "activate_hospital": "false",
+    "manual_social_distancing_lvl": '2',
+    "activate_automatic_mode": "true"
 }
 config['covid_model'] = {
     "; Number of agents\n"
-    "N": "200",
+    "N": "150",
     "; Number of initially infected agents\n"
     "M": "30",
     "; Number of healthy agents who wear face masks\n"
@@ -22,7 +23,7 @@ config['covid_model'] = {
 
 config['hospital_capacity'] = {
     "; Hospital Capacity\n"
-    "L": "40"
+    "L": "20"
 }
 
 config['pass_probability'] = {
@@ -68,6 +69,26 @@ config['fatality_rate'] = {
     '7': '0.4',
     "; Fatality rate for agents aged between 80~89 years old\n"
     '8': '0.5'
+}
+
+config['immunity_loss'] = {
+    "; Probability of people losing immunity after a while\n"
+    'IMMUNITY_LOSS_PR': '0.83',
+    "; Minimum time people lose immunity after recovery\n"
+    'IMMUNITY_LOSS_MIN': '7',
+    "; Maximum time people lose immunity after recovery\n"
+    'IMMUNITY_LOSS_MAX': '14',
+}
+
+config['quarantine_rate'] = {
+    '0': '0',
+    '1': '0.6',
+    '2': '0.9',
+}
+
+config['quarantine_threshold'] = {
+    'level_1_threshold': '0.05',
+    'level_2_threshold': '0.1',
 }
 
 with open('config.ini', 'w') as config_file:

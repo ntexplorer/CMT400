@@ -97,5 +97,5 @@ config['quarantine_threshold'] = {
     'level_2_threshold': '0.2',
 }
 
-with open('../visualization/config.ini', 'w') as config_file:
+with open('config.ini', 'w') as config_file:
     config.write(config_file)

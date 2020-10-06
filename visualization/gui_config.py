@@ -3,20 +3,14 @@ import tkinter as tk
 from tkinter import messagebox as msg
 from tkinter import ttk
 
-from mesa.visualization.ModularVisualization import ModularServer
-from mesa.visualization.modules import CanvasGrid
-from mesa.visualization.modules import ChartModule
-
-from covid_simulation.model import CovidModel
-
 
 class GUI:
     def __init__(self):
         self.win = tk.Tk()
-        self.win.title('COVID-19 Agent-based Simulation')
+        self.win.title('COVID-19 Agent-based Simulation Configuration')
 
         self.default_frame = ttk.LabelFrame(self.win, text='Simulation Settings')
-        self.default_frame.grid(column=0, row=0, padx=10, pady=8)
+        self.default_frame.grid(column=0, row=0, padx=7, pady=5, columnspan=2)
 
         self.hospital_toggle_label = ttk.Label(self.default_frame, text='Activate Hospital:')
         self.hospital_toggle_label.grid(column=0, row=0, sticky='W')
@@ -34,7 +28,7 @@ class GUI:
         self.social_rad_2 = tk.Radiobutton(self.default_frame, text='No', variable=self.social_toggle, value=0)
         self.social_rad_2.grid(column=2, row=1, padx=8, pady=5, sticky="W")
 
-        self.manual_social_label = ttk.Label(self.default_frame, text='Manual Social Distancing Level Setting:')
+        self.manual_social_label = ttk.Label(self.default_frame, text='Manually Set Social Distancing Level:')
         self.manual_social_label.grid(column=0, row=2, stick='W')
         self.manual_social_lvl = tk.StringVar()
         self.manual_social_selected = ttk.Combobox(self.default_frame, width=5, textvariable=self.manual_social_lvl,
@@ -43,8 +37,13 @@ class GUI:
         self.manual_social_selected.grid(column=1, row=2, padx=8, pady=5, sticky="W")
         self.manual_social_selected.current(0)
 
+        self.manual_social_comment_label = ttk.Label(self.default_frame,
+                                                     text='(This setting is only activated when auto '
+                                                          'social-distancing policy is switched off)')
+        self.manual_social_comment_label.grid(column=0, row=3, stick='W')
+
         self.model_frame = ttk.LabelFrame(self.win, text='Model Settings')
-        self.model_frame.grid(column=0, row=1, padx=10, pady=8)
+        self.model_frame.grid(column=0, row=1, padx=7, pady=5)
 
         self.agent_number_label = ttk.Label(self.model_frame, text='Number of Agents:')
         self.agent_number_label.grid(column=0, row=0, padx=8, pady=5, sticky="W")
@@ -90,7 +89,7 @@ class GUI:
         self.hospital_capacity_entry.grid(column=1, row=6, padx=8, pady=5, sticky='W')
 
         self.pass_pr_frame = ttk.LabelFrame(self.win, text='Passing Probability')
-        self.pass_pr_frame.grid(column=0, row=2, padx=10, pady=8)
+        self.pass_pr_frame.grid(column=1, row=2, padx=7, pady=5)
 
         self.pass_pr_both_on_label = ttk.Label(self.pass_pr_frame, text='Both Agents Wear Masks:')
         self.pass_pr_both_on_label.grid(column=0, row=0, padx=8, pady=5, sticky="W")
@@ -119,8 +118,8 @@ class GUI:
         self.pass_pr_both_off_entry = ttk.Entry(self.pass_pr_frame, width=10, textvariable=self.pass_pr_both_off)
         self.pass_pr_both_off_entry.grid(column=1, row=3, padx=8, pady=5, sticky='W')
 
-        self.incubation_symptomatic_frame = ttk.LabelFrame(self.win, text='Incubation Setting')
-        self.incubation_symptomatic_frame.grid(column=1, row=0, padx=10, pady=8)
+        self.incubation_symptomatic_frame = ttk.LabelFrame(self.win, text='Incubation & Symptomatic')
+        self.incubation_symptomatic_frame.grid(column=1, row=3, padx=7, pady=5)
 
         self.incubation_min_label = ttk.Label(self.incubation_symptomatic_frame, text='Minimum Incubation Period:')
         self.incubation_min_label.grid(column=0, row=0, padx=8, pady=5, sticky='W')
@@ -151,7 +150,7 @@ class GUI:
         self.symptomatic_max_entry.grid(column=1, row=3, padx=8, pady=5, sticky='W')
 
         self.fatality_rate_frame = ttk.LabelFrame(self.win, text='Fatality Rate')
-        self.fatality_rate_frame.grid(column=1, row=1, padx=10, pady=8)
+        self.fatality_rate_frame.grid(column=0, row=2, padx=7, pady=5, rowspan=2)
 
         self.fatality_rate_0_label = ttk.Label(self.fatality_rate_frame, text='0~9 Years Old:')
         self.fatality_rate_0_label.grid(column=0, row=0, padx=8, pady=5, sticky='W')
@@ -217,7 +216,7 @@ class GUI:
         self.fatality_rate_8_entry.grid(column=1, row=8, padx=8, pady=5, sticky='W')
 
         self.immunity_frame = ttk.LabelFrame(self.win, text='Immunity Settings')
-        self.immunity_frame.grid(column=1, row=2, padx=10, pady=8)
+        self.immunity_frame.grid(column=0, row=4, padx=7, pady=5, columnspan=2)
 
         self.immunity_loss_pr_label = ttk.Label(self.immunity_frame,
                                                 text='Probability Of Agents Losing Immunity After Recovery:')
@@ -244,7 +243,7 @@ class GUI:
         self.immunity_loss_max_entry.grid(column=1, row=2, padx=8, pady=5, sticky='W')
 
         self.quarantine_frame = ttk.LabelFrame(self.win, text='Social Distancing Policy')
-        self.quarantine_frame.grid(column=0, row=3, padx=10, pady=8, columnspan=2)
+        self.quarantine_frame.grid(column=1, row=1, padx=7, pady=5)
 
         self.quarantine_ratio_0_label = ttk.Label(self.quarantine_frame,
                                                   text='Level 0 Ratio Of Social-distancing Agents')
@@ -287,20 +286,17 @@ class GUI:
         self.level_2_threshold_entry.grid(column=1, row=4, padx=8, pady=5, sticky='W')
 
         self.update_btn = ttk.Button(self.win, text='Update Configuration', command=self.update_config)
-        self.update_btn.grid(column=0, row=5, padx=10, pady=8)
-
-        self.run_simulation_btn = ttk.Button(self.win, text='Run Simulation', command=self.run_simulation)
-        self.run_simulation_btn.grid(column=1, row=5, padx=10, pady=8)
+        self.update_btn.grid(column=0, row=5, padx=7, pady=5, columnspan=2)
 
     def update_config(self):
         config = configparser.ConfigParser()
         config['DEFAULT'] = {
             "; Toggle to activate hospital\n"
-            "activate_hospital": str(self.hospital_toggle.get()),
+            "activate_hospital": self.hospital_toggle.get(),
             "; If auto mode is off, set the social-distancing level below (0-2) manually\n"
-            "manual_social_distancing_lvl": str(self.manual_social_lvl.get()),
+            "manual_social_distancing_lvl": self.manual_social_lvl.get(),
             "; Toggle to activate auto-social-distancing\n"
-            "activate_automatic_mode": str(self.social_toggle.get())
+            "activate_automatic_mode": self.social_toggle.get()
         }
         config['covid_model'] = {
             "; Number of agents\n"
@@ -390,60 +386,10 @@ class GUI:
             'level_2_threshold': self.level_2_threshold.get(),
         }
 
-        with open('../visualization/config.ini', 'w') as config_file:
+        with open('config.ini', 'w') as config_file:
             config.write(config_file)
 
         msg.showinfo('Success', 'Configuration updated successfully!')
-
-    def run_simulation(self):
-        config = configparser.ConfigParser()
-        config.read('../visualization/config.ini')
-        covid_model = config['covid_model']
-        hospital_capacity = config['hospital_capacity']
-
-        def agent_portrayal(agent):
-            portrayal = {
-                "Filled": "true",
-                "Layer": 0,
-            }
-            if agent.has_immunity:
-                portrayal["Shape"] = "immune.png"
-            elif agent.is_infected and not agent.has_symptom and not agent.wear_mask:
-                portrayal["Shape"] = "incubation_without_mask.png"
-            elif agent.is_infected and not agent.has_symptom and agent.wear_mask:
-                portrayal["Shape"] = "incubation_mask.png"
-            elif agent.is_infected and agent.has_symptom and not agent.wear_mask:
-                portrayal["Shape"] = "symptomatic_without_mask.png"
-            elif agent.is_infected and agent.has_symptom and agent.wear_mask:
-                portrayal["Shape"] = "symptomatic_mask.png"
-
-            elif not agent.is_infected and agent.wear_mask:
-                portrayal["Shape"] = "healthy_mask.png"
-            else:
-                portrayal["Shape"] = "healthy_without_mask.png"
-            return portrayal
-
-        grid = CanvasGrid(agent_portrayal, int(covid_model['width']), int(covid_model['height']), 800, 800)
-
-        chart1 = ChartModule([{"Label": "Fatalities", "Color": "Black"},
-                              {"Label": "Immune", "Color": "Blue"},
-                              {"Label": "Healthy", "Color": "Green"},
-                              {"Label": "Infected", "Color": "Orange"},
-                              {"Label": "Hospital Occupation", "Color": "Yellow"}],
-                             data_collector_name='data_collector')
-        chart2 = ChartModule([{"Label": "Fatality Rate", "Color": "Black"},
-                              {"Label": "Morbidity Rate", "Color": "Orange"}],
-                             data_collector_name='data_collector')
-        server = ModularServer(CovidModel,
-                               [grid, chart1, chart2],
-                               "COVID Model Simulation",
-                               {"N": int(covid_model['N']), "M": int(covid_model['M']),
-                                "J": int(covid_model['J']), "K": int(covid_model['K']),
-                                "L": int(hospital_capacity["L"]),
-                                "width": int(covid_model['width']),
-                                "height": int(covid_model['height'])})
-        server.port = 8521  # The default
-        server.launch()
 
 
 if __name__ == "__main__":

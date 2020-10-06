@@ -1,14 +1,15 @@
 import configparser
 
-from covid_simulation.covid_agent import CovidAgent
-from covid_simulation.data_compute import *
 from mesa import Model
 from mesa.datacollection import DataCollector
 from mesa.space import SingleGrid
 from mesa.time import RandomActivation
 
+from covid_simulation.covid_agent import CovidAgent
+from covid_simulation.data_compute import *
+
 config = configparser.ConfigParser()
-config.read('../covid_simulation/config.ini')
+config.read('../visualization/config.ini')
 default_setting = config['DEFAULT']
 quarantine_rate = config['quarantine_rate']
 quarantine_threshold = config['quarantine_threshold']

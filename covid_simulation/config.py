@@ -39,6 +39,7 @@ config['pass_probability'] = {
     "; Pass probability when both agents don't wear masks\n"
     "PASS_PR_BOTH_OFF": "0.95"
 }
+
 config['incubation'] = {
     "; Minimum incubation period\n"
     "INCUBATION_MIN": "1",
@@ -96,5 +97,5 @@ config['quarantine_threshold'] = {
     'level_2_threshold': '0.2',
 }
 
-with open('config.ini', 'w') as config_file:
+with open('../visualization/config.ini', 'w') as config_file:
     config.write(config_file)

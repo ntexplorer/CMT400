@@ -5,7 +5,7 @@ from mesa import Agent
 from mesa.space import Grid
 
 config = configparser.ConfigParser()
-config.read('../covid_simulation/config.ini')
+config.read('../visualization/config.ini')
 default_setting = config['DEFAULT']
 pass_probability = config['pass_probability']
 incubation = config['incubation']

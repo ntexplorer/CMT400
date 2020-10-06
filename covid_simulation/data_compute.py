@@ -4,6 +4,16 @@ def compute_fatality_rate(model):
     return (N - D) / N
 
 
+def compute_morbidity_rate(model):
+    morbidity_list = []
+    N = model.agent_number
+    for agent in model.agent_list:
+        if agent.is_infected:
+            morbidity_list.append(agent)
+    H = len(morbidity_list)
+    return H / N
+
+
 def compute_fatalities(model):
     N = model.agent_number
     D = len([agent for agent in model.schedule.agents])

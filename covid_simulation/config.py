@@ -5,13 +5,13 @@ config['DEFAULT'] = {
     "; Toggle to activate hospital\n"
     "activate_hospital": "true",
     "; If auto mode is off, set the social-distancing level below (0-2) manually\n"
-    "manual_social_distancing_lvl": '2',
+    "manual_social_distancing_lvl": '0',
     "; Toggle to activate auto-social-distancing\n"
     "activate_automatic_mode": "true"
 }
 config['covid_model'] = {
     "; Number of agents\n"
-    "N": "150",
+    "N": "200",
     "; Number of initially infected agents\n"
     "M": "30",
     "; Number of healthy agents who wear face masks\n"
@@ -92,8 +92,8 @@ config['quarantine_rate'] = {
 
 config['quarantine_threshold'] = {
     "; The threshold of the ratio of agents to start social-distancing policy\n"
-    'level_1_threshold': '0.05',
-    'level_2_threshold': '0.1',
+    'level_1_threshold': '0.1',
+    'level_2_threshold': '0.2',
 }
 
 with open('config.ini', 'w') as config_file:

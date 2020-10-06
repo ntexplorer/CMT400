@@ -1,10 +1,9 @@
 import configparser
 
+from covid_simulation.model import CovidModel
 from mesa.visualization.ModularVisualization import ModularServer
 from mesa.visualization.modules import CanvasGrid
 from mesa.visualization.modules import ChartModule
-
-from covid_simulation.model import CovidModel
 
 config = configparser.ConfigParser()
 config.read('../covid_simulation/config.ini')
@@ -40,14 +39,17 @@ def agent_portrayal(agent):
 
 grid = CanvasGrid(agent_portrayal, int(covid_model['width']), int(covid_model['height']), 800, 800)
 
-chart = ChartModule([{"Label": "Fatalities", "Color": "Black"},
-                     {"Label": "Immune", "Color": "Blue"},
-                     {"Label": "Healthy", "Color": "Green"},
-                     {"Label": "Infected", "Color": "Orange"},
-                     {"Label": "Hospital Occupation", "Color": "Yellow"}],
-                    data_collector_name='data_collector')
+chart1 = ChartModule([{"Label": "Fatalities", "Color": "Black"},
+                      {"Label": "Immune", "Color": "Blue"},
+                      {"Label": "Healthy", "Color": "Green"},
+                      {"Label": "Infected", "Color": "Orange"},
+                      {"Label": "Hospital Occupation", "Color": "Yellow"}],
+                     data_collector_name='data_collector')
+chart2 = ChartModule([{"Label": "Fatality Rate", "Color": "Black"},
+                      {"Label": "Morbidity Rate", "Color": "Orange"}],
+                     data_collector_name='data_collector')
 server = ModularServer(CovidModel,
-                       [grid, chart],
+                       [grid, chart1, chart2],
                        "COVID Model Simulation",
                        {"N": int(covid_model['N']), "M": int(covid_model['M']),
                         "J": int(covid_model['J']), "K": int(covid_model['K']),

@@ -1,12 +1,11 @@
 import configparser
 
+from covid_simulation.covid_agent import CovidAgent
+from covid_simulation.data_compute import *
 from mesa import Model
 from mesa.datacollection import DataCollector
 from mesa.space import SingleGrid
 from mesa.time import RandomActivation
-
-from covid_simulation.covid_agent import CovidAgent
-from covid_simulation.data_compute import *
 
 config = configparser.ConfigParser()
 config.read('../covid_simulation/config.ini')
@@ -70,7 +69,9 @@ class CovidModel(Model):
                              "Immune": compute_immune,
                              "Healthy": compute_healthy_agent,
                              "Infected": compute_infection,
-                             "Hospital Occupation": compute_hospital_treated}
+                             "Hospital Occupation": compute_hospital_treated,
+                             "Fatality Rate": compute_fatality_rate,
+                             "Morbidity Rate": compute_morbidity_rate}
         )
 
     def step(self):

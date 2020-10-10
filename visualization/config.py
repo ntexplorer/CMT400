@@ -18,6 +18,10 @@ config['covid_model'] = {
     "J": "40",
     "; Number of infected agents who wear face masks\n"
     "K": "2",
+    "; Mu of age distribution\n"
+    "MU": "40",
+    "; Sigma of age distribution\n"
+    "SIGMA": "1",
     "; Width of the grid\n"
     "width": "50",
     "; Height of the grid\n"

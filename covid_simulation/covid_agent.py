@@ -6,6 +6,7 @@ from mesa.space import Grid
 
 config = configparser.ConfigParser()
 config.read('../visualization/config.ini')
+covid_model = config['covid_model']
 default_setting = config['DEFAULT']
 pass_probability = config['pass_probability']
 incubation = config['incubation']
@@ -19,7 +20,8 @@ class CovidAgent(Agent):
     def __init__(self, unique_id, model, is_infected: bool, wear_mask: bool):
         super().__init__(unique_id, model)
         # agents age from 0 to 89
-        self.age = self.random.randint(0, 89)
+        self.age = round(self.random.normalvariate(int(covid_model['MU']),
+                                                   float(covid_model['SIGMA'])))
         self.is_infected = is_infected
         self.wear_mask = wear_mask
         self.has_symptom = False

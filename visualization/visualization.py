@@ -18,20 +18,19 @@ def agent_portrayal(agent):
         "Layer": 0,
     }
     if agent.has_immunity:
-        portrayal["Shape"] = "immune.png"
+        portrayal["Shape"] = "img/immune.png"
     elif agent.is_infected and not agent.has_symptom and not agent.wear_mask:
-        portrayal["Shape"] = "incubation_without_mask.png"
+        portrayal["Shape"] = "img/incubation_without_mask.png"
     elif agent.is_infected and not agent.has_symptom and agent.wear_mask:
-        portrayal["Shape"] = "incubation_mask.png"
+        portrayal["Shape"] = "img/incubation_mask.png"
     elif agent.is_infected and agent.has_symptom and not agent.wear_mask:
-        portrayal["Shape"] = "symptomatic_without_mask.png"
+        portrayal["Shape"] = "img/symptomatic_without_mask.png"
     elif agent.is_infected and agent.has_symptom and agent.wear_mask:
-        portrayal["Shape"] = "symptomatic_mask.png"
-
+        portrayal["Shape"] = "img/symptomatic_mask.png"
     elif not agent.is_infected and agent.wear_mask:
-        portrayal["Shape"] = "healthy_mask.png"
+        portrayal["Shape"] = "img/healthy_mask.png"
     else:
-        portrayal["Shape"] = "healthy_without_mask.png"
+        portrayal["Shape"] = "img/healthy_without_mask.png"
     return portrayal
 
 

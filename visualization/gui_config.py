@@ -8,7 +8,7 @@ class GUI:
     def __init__(self):
         self.win = tk.Tk()
         self.win.title('COVID-19 Agent-based Simulation Configuration')
-
+        # Simulation Settings Label Frame
         self.default_frame = ttk.LabelFrame(self.win, text='Simulation Settings')
         self.default_frame.grid(column=0, row=0, padx=7, pady=5, columnspan=2)
 
@@ -42,6 +42,7 @@ class GUI:
                                                           'social-distancing policy is switched off)')
         self.manual_social_comment_label.grid(column=0, row=3, stick='W')
 
+        # Model Settings Label Frame
         self.model_frame = ttk.LabelFrame(self.win, text='Model Settings')
         self.model_frame.grid(column=0, row=1, padx=7, pady=5)
 
@@ -70,17 +71,29 @@ class GUI:
                                                      textvariable=self.initial_infected_mask)
         self.initial_infected_mask_entry.grid(column=1, row=3, padx=8, pady=5, sticky="W")
 
+        self.mu_label = ttk.Label(self.model_frame, text='Mu of Age Distribution:')
+        self.mu_label.grid(column=0, row=4, padx=8, pady=5, sticky="W")
+        self.mu = tk.StringVar(value=40)
+        self.mu_entry = ttk.Entry(self.model_frame, width=10, textvariable=self.mu)
+        self.mu_entry.grid(column=1, row=4, padx=8, pady=5, sticky="W")
+
+        self.sigma_label = ttk.Label(self.model_frame, text='Sigma of Age Distribution:')
+        self.sigma_label.grid(column=0, row=5, padx=8, pady=5, sticky="W")
+        self.sigma = tk.StringVar(value=1)
+        self.sigma_entry = ttk.Entry(self.model_frame, width=10, textvariable=self.sigma)
+        self.sigma_entry.grid(column=1, row=5, padx=8, pady=5, sticky="W")
+
         self.grid_width_label = ttk.Label(self.model_frame, text='Width of The Grid:')
-        self.grid_width_label.grid(column=0, row=4, padx=8, pady=5, sticky="W")
+        self.grid_width_label.grid(column=0, row=6, padx=8, pady=5, sticky="W")
         self.grid_width = tk.StringVar(value=50)
         self.grid_width_entry = ttk.Entry(self.model_frame, width=10, textvariable=self.grid_width)
-        self.grid_width_entry.grid(column=1, row=4, padx=8, pady=5, sticky="W")
+        self.grid_width_entry.grid(column=1, row=6, padx=8, pady=5, sticky="W")
 
         self.grid_height_label = ttk.Label(self.model_frame, text='Height of The Grid:')
-        self.grid_height_label.grid(column=0, row=5, padx=8, pady=5, sticky="W")
+        self.grid_height_label.grid(column=0, row=7, padx=8, pady=5, sticky="W")
         self.grid_height = tk.StringVar(value=50)
         self.grid_height_entry = ttk.Entry(self.model_frame, width=10, textvariable=self.grid_height)
-        self.grid_height_entry.grid(column=1, row=5, padx=8, pady=5, sticky="W")
+        self.grid_height_entry.grid(column=1, row=7, padx=8, pady=5, sticky="W")
 
         self.hospital_capacity_label = ttk.Label(self.model_frame, text='Hospital Capacity')
         self.hospital_capacity_label.grid(column=0, row=6, padx=8, pady=5, sticky='W')
@@ -88,6 +101,7 @@ class GUI:
         self.hospital_capacity_entry = ttk.Entry(self.model_frame, width=10, textvariable=self.hospital_capacity)
         self.hospital_capacity_entry.grid(column=1, row=6, padx=8, pady=5, sticky='W')
 
+        # Passing probability label frame
         self.pass_pr_frame = ttk.LabelFrame(self.win, text='Passing Probability')
         self.pass_pr_frame.grid(column=1, row=2, padx=7, pady=5)
 
@@ -118,6 +132,7 @@ class GUI:
         self.pass_pr_both_off_entry = ttk.Entry(self.pass_pr_frame, width=10, textvariable=self.pass_pr_both_off)
         self.pass_pr_both_off_entry.grid(column=1, row=3, padx=8, pady=5, sticky='W')
 
+        # Incubation and symptomatic label frame
         self.incubation_symptomatic_frame = ttk.LabelFrame(self.win, text='Incubation & Symptomatic')
         self.incubation_symptomatic_frame.grid(column=1, row=3, padx=7, pady=5)
 
@@ -149,6 +164,7 @@ class GUI:
                                                textvariable=self.symptomatic_max)
         self.symptomatic_max_entry.grid(column=1, row=3, padx=8, pady=5, sticky='W')
 
+        # Fatality rate label frame
         self.fatality_rate_frame = ttk.LabelFrame(self.win, text='Fatality Rate')
         self.fatality_rate_frame.grid(column=0, row=2, padx=7, pady=5, rowspan=2)
 
@@ -215,6 +231,7 @@ class GUI:
                                                textvariable=self.fatality_rate_8)
         self.fatality_rate_8_entry.grid(column=1, row=8, padx=8, pady=5, sticky='W')
 
+        # Immunity loss label frame
         self.immunity_frame = ttk.LabelFrame(self.win, text='Immunity Settings')
         self.immunity_frame.grid(column=0, row=4, padx=7, pady=5, columnspan=2)
 
@@ -242,6 +259,7 @@ class GUI:
                                                  textvariable=self.immunity_loss_max)
         self.immunity_loss_max_entry.grid(column=1, row=2, padx=8, pady=5, sticky='W')
 
+        # Social_distancing policy label frame
         self.quarantine_frame = ttk.LabelFrame(self.win, text='Social Distancing Policy')
         self.quarantine_frame.grid(column=1, row=1, padx=7, pady=5)
 
@@ -285,8 +303,24 @@ class GUI:
                                                  textvariable=self.level_2_threshold)
         self.level_2_threshold_entry.grid(column=1, row=4, padx=8, pady=5, sticky='W')
 
-        self.update_btn = ttk.Button(self.win, text='Update Configuration', command=self.update_config)
+        # Update configuration button
+        self.update_btn = ttk.Button(self.win, text='Update Configuration', command=self.update_btn_pressed)
         self.update_btn.grid(column=0, row=5, padx=7, pady=5, columnspan=2)
+
+    def update_btn_pressed(self):
+        try:
+            self.validate_data()
+        except AssertionError:
+            msg.showerror("Input Error", "There's at least one input error, please check again")
+        else:
+            self.update_config()
+
+    def validate_data(self):
+        # TODO complete the assert
+        assert 10 <= int(self.agent_number.get()) <= 1000
+        assert 1 < int(self.initial_infected.get()) <= int(self.agent_number.get())
+        assert 0 <= int(self.initial_healthy_mask.get()) <= (
+                    int(self.agent_number.get()) - int(self.initial_infected.get()))
 
     def update_config(self):
         config = configparser.ConfigParser()
@@ -307,6 +341,10 @@ class GUI:
             "J": self.initial_healthy_mask.get(),
             "; Number of infected agents who wear face masks\n"
             "K": self.initial_infected_mask.get(),
+            "; Mu of age distribution\n"
+            "MU": self.mu.get(),
+            "; Sigma of age distribution\n"
+            "SIGMA": self.sigma.get(),
             "; Width of the grid\n"
             "width": self.grid_width.get(),
             "; Height of the grid\n"

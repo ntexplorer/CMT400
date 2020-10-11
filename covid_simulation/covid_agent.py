@@ -7,7 +7,6 @@ from mesa.space import Grid
 config = configparser.ConfigParser()
 config.read('../visualization/config.ini')
 covid_model = config['covid_model']
-default_setting = config['DEFAULT']
 pass_probability = config['pass_probability']
 incubation = config['incubation']
 symptomatic = config['symptomatic']
@@ -20,8 +19,7 @@ class CovidAgent(Agent):
     def __init__(self, unique_id, model, is_infected: bool, wear_mask: bool):
         super().__init__(unique_id, model)
         # agents age from 0 to 89
-        self.age = round(self.random.normalvariate(int(covid_model['MU']),
-                                                   float(covid_model['SIGMA'])))
+        self.age = self.set_age()
         self.is_infected = is_infected
         self.wear_mask = wear_mask
         self.has_symptom = False
@@ -37,6 +35,13 @@ class CovidAgent(Agent):
         self.immunity_countdown = -1
         self.immunity_loss_toggle = False
         self.social_distancing_toggle = False
+
+    def set_age(self):
+        while True:
+            temp_age = math.floor(self.random.normalvariate(int(covid_model['MU']),
+                                                            int(covid_model['SIGMA'])))
+            if 0 <= temp_age <= 89:
+                return temp_age
 
     def step(self) -> None:
         # if the agent is not dead then proceed steps
@@ -54,7 +59,7 @@ class CovidAgent(Agent):
 
     # check if auto quarantine change mode is on, if not switch to manual mode
     def check_quarantine_status(self):
-        if default_setting.getboolean('activate_automatic_mode'):
+        if self.model.auto_social_distancing:
             self.model.auto_quarantine_get_symptomatic_rate()
             self.model.auto_quarantine_update_quarantine_list()
         else:
@@ -62,7 +67,7 @@ class CovidAgent(Agent):
 
     # check if hospital mode is on
     def hospital_treatment(self):
-        if default_setting.getboolean('activate_hospital'):
+        if self.model.hospital_activated:
             # if the agent is symptomatic and there's still room in the hospital and it's not in it
             if self.has_symptom and self.model.hospital_occupation < \
                     self.model.hospital_capacity and not self.in_hospital:

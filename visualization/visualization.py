@@ -8,6 +8,7 @@ from covid_simulation.model import CovidModel
 
 new_config = configparser.ConfigParser()
 new_config.read('../visualization/config.ini')
+default_setting = new_config['DEFAULT']
 covid_model = new_config['covid_model']
 hospital_capacity = new_config['hospital_capacity']
 
@@ -52,6 +53,8 @@ server = ModularServer(CovidModel,
                         "J": int(covid_model['J']), "K": int(covid_model['K']),
                         "L": int(hospital_capacity["L"]),
                         "width": int(covid_model['width']),
-                        "height": int(covid_model['height'])})
+                        "height": int(covid_model['height']),
+                        "hospital_activated": int(default_setting['activate_hospital']),
+                        "auto_social_distancing": int(default_setting['activate_automatic_mode'])})
 server.port = 8521  # The default
 server.launch()

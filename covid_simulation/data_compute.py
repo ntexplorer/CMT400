@@ -51,3 +51,10 @@ def compute_hospital_treated(model):
         if agent.in_hospital:
             hospital_treated_list.append(agent)
     return len(hospital_treated_list)
+
+
+def get_step_number(model):
+    if model.schedule_end_steps != 0:
+        return model.schedule_end_steps
+    else:
+        return 300

@@ -22,7 +22,8 @@ class CovidModel(Model):
     add all the agents in the agent_list for function position_agent
     """
 
-    def __init__(self, N: int, M: int, J: int, K: int, L: int, width, height):
+    def __init__(self, N: int, M: int, J: int, K: int, L: int, width, height,
+                 hospital_activated: bool, auto_social_distancing: bool):
         super().__init__()
         self.agent_number = N
         self.initial_infected = M
@@ -30,8 +31,12 @@ class CovidModel(Model):
         self.carrier_with_mask = K
         self.hospital_capacity = L
         self.hospital_occupation = 0
+        self.hospital_activated = hospital_activated
+        self.auto_social_distancing = auto_social_distancing
         self.grid = SingleGrid(width, height, True)
         self.schedule = RandomActivation(self)
+        self.schedule_end_steps = 0
+        self.schedule_end_flag = False
         self.running = True
         self.agent_list = []
         self.symptomatic_list = []
@@ -78,6 +83,21 @@ class CovidModel(Model):
     def step(self):
         self.data_collector.collect(self)
         self.schedule.step()
+        self.get_end_time()
+
+    # A function to check if all agents are not infected
+    def check_all_agents(self):
+        for agent in self.agent_list:
+            if agent.is_infected:
+                return False
+        return True
+
+    def get_end_time(self):
+        # if all the agents get rid of infection and the model has not register the steps
+        if self.check_all_agents() and not self.schedule_end_flag:
+            self.schedule_end_steps = self.schedule.steps
+            # set the flag to true to only record the steps once
+            self.schedule_end_flag = True
 
     def auto_quarantine_get_symptomatic_rate(self):
         # if the agent has symptom, append it to the list

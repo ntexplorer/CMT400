@@ -73,13 +73,13 @@ class GUI:
 
         self.mu_label = ttk.Label(self.model_frame, text='Mu of Age Distribution:')
         self.mu_label.grid(column=0, row=4, padx=8, pady=5, sticky="W")
-        self.mu = tk.StringVar(value=40)
+        self.mu = tk.StringVar(value=45)
         self.mu_entry = ttk.Entry(self.model_frame, width=10, textvariable=self.mu)
         self.mu_entry.grid(column=1, row=4, padx=8, pady=5, sticky="W")
 
         self.sigma_label = ttk.Label(self.model_frame, text='Sigma of Age Distribution:')
         self.sigma_label.grid(column=0, row=5, padx=8, pady=5, sticky="W")
-        self.sigma = tk.StringVar(value=1)
+        self.sigma = tk.StringVar(value=15)
         self.sigma_entry = ttk.Entry(self.model_frame, width=10, textvariable=self.sigma)
         self.sigma_entry.grid(column=1, row=5, padx=8, pady=5, sticky="W")
 
@@ -96,10 +96,10 @@ class GUI:
         self.grid_height_entry.grid(column=1, row=7, padx=8, pady=5, sticky="W")
 
         self.hospital_capacity_label = ttk.Label(self.model_frame, text='Hospital Capacity')
-        self.hospital_capacity_label.grid(column=0, row=6, padx=8, pady=5, sticky='W')
+        self.hospital_capacity_label.grid(column=0, row=8, padx=8, pady=5, sticky='W')
         self.hospital_capacity = tk.StringVar(value=20)
         self.hospital_capacity_entry = ttk.Entry(self.model_frame, width=10, textvariable=self.hospital_capacity)
-        self.hospital_capacity_entry.grid(column=1, row=6, padx=8, pady=5, sticky='W')
+        self.hospital_capacity_entry.grid(column=1, row=8, padx=8, pady=5, sticky='W')
 
         # Passing probability label frame
         self.pass_pr_frame = ttk.LabelFrame(self.win, text='Passing Probability')
@@ -236,7 +236,7 @@ class GUI:
         self.immunity_frame.grid(column=0, row=4, padx=7, pady=5, columnspan=2)
 
         self.immunity_loss_pr_label = ttk.Label(self.immunity_frame,
-                                                text='Probability Of Agents Losing Immunity After Recovery:')
+                                                text='Probability of Agents Losing Immunity After Recovery:')
         self.immunity_loss_pr_label.grid(column=0, row=0, padx=8, pady=5, sticky='W')
         self.immunity_loss_pr = tk.StringVar(value=0.83)
         self.immunity_loss_pr_entry = ttk.Entry(self.immunity_frame, width=10,
@@ -264,7 +264,7 @@ class GUI:
         self.quarantine_frame.grid(column=1, row=1, padx=7, pady=5)
 
         self.quarantine_ratio_0_label = ttk.Label(self.quarantine_frame,
-                                                  text='Level 0 Ratio Of Social-distancing Agents')
+                                                  text='Level 0 Ratio of Social-distancing Agents')
         self.quarantine_ratio_0_label.grid(column=0, row=0, padx=8, pady=5, sticky='W')
         self.quarantine_ratio_0 = tk.StringVar(value=0)
         self.quarantine_ratio_0_entry = ttk.Entry(self.quarantine_frame, width=10,
@@ -272,7 +272,7 @@ class GUI:
         self.quarantine_ratio_0_entry.grid(column=1, row=0, padx=8, pady=5, sticky='W')
 
         self.quarantine_ratio_1_label = ttk.Label(self.quarantine_frame,
-                                                  text='Level 1 Ratio Of Social-distancing Agents')
+                                                  text='Level 1 Ratio of Social-distancing Agents')
         self.quarantine_ratio_1_label.grid(column=0, row=1, padx=8, pady=5, sticky='W')
         self.quarantine_ratio_1 = tk.StringVar(value=0.6)
         self.quarantine_ratio_1_entry = ttk.Entry(self.quarantine_frame, width=10,
@@ -280,7 +280,7 @@ class GUI:
         self.quarantine_ratio_1_entry.grid(column=1, row=1, padx=8, pady=5, sticky='W')
 
         self.quarantine_ratio_2_label = ttk.Label(self.quarantine_frame,
-                                                  text='Level 2 Ratio Of Social-distancing Agents')
+                                                  text='Level 2 Ratio of Social-distancing Agents')
         self.quarantine_ratio_2_label.grid(column=0, row=2, padx=8, pady=5, sticky='W')
         self.quarantine_ratio_2 = tk.StringVar(value=0.9)
         self.quarantine_ratio_2_entry = ttk.Entry(self.quarantine_frame, width=10,
@@ -318,9 +318,9 @@ class GUI:
     def validate_data(self):
         # TODO complete the assert
         assert 10 <= int(self.agent_number.get()) <= 1000
-        assert 1 < int(self.initial_infected.get()) <= int(self.agent_number.get())
+        assert 1 <= int(self.initial_infected.get()) <= int(self.agent_number.get())
         assert 0 <= int(self.initial_healthy_mask.get()) <= (
-                    int(self.agent_number.get()) - int(self.initial_infected.get()))
+                int(self.agent_number.get()) - int(self.initial_infected.get()))
 
     def update_config(self):
         config = configparser.ConfigParser()

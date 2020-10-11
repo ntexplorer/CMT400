@@ -9,6 +9,7 @@ config['DEFAULT'] = {
     "; Toggle to activate auto-social-distancing\n"
     "activate_automatic_mode": "true"
 }
+
 config['covid_model'] = {
     "; Number of agents\n"
     "N": "200",
@@ -19,9 +20,9 @@ config['covid_model'] = {
     "; Number of infected agents who wear face masks\n"
     "K": "2",
     "; Mu of age distribution\n"
-    "MU": "40",
+    "MU": "45",
     "; Sigma of age distribution\n"
-    "SIGMA": "1",
+    "SIGMA": "15",
     "; Width of the grid\n"
     "width": "50",
     "; Height of the grid\n"
@@ -75,7 +76,7 @@ config['fatality_rate'] = {
     '6': '0.4',
     "; Fatality rate for agents aged between 70~79 years old\n"
     '7': '0.4',
-    "; Fatality rate for agents aged between 80~89 years old\n"
+    "; Fatality rate for agents aged above 80~89 years old\n"
     '8': '0.5'
 }
 

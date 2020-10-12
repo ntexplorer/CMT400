@@ -16,9 +16,9 @@ config['covid_model'] = {
     "; Number of initially infected agents\n"
     "M": "30",
     "; Number of healthy agents who wear face masks\n"
-    "J": "40",
+    "J": "0",
     "; Number of infected agents who wear face masks\n"
-    "K": "2",
+    "K": "0",
     "; Mu of age distribution\n"
     "MU": "45",
     "; Sigma of age distribution\n"
@@ -31,7 +31,7 @@ config['covid_model'] = {
 
 config['hospital_capacity'] = {
     "; Hospital Capacity\n"
-    "L": "20"
+    "L": "35"
 }
 
 config['pass_probability'] = {

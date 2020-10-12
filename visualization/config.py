@@ -42,7 +42,9 @@ config['pass_probability'] = {
     "; Pass probability when only the healthy contact wear masks\n"
     "PASS_PR_CONTACT_ON": "0.7",
     "; Pass probability when both agents don't wear masks\n"
-    "PASS_PR_BOTH_OFF": "0.95"
+    "PASS_PR_BOTH_OFF": "0.95",
+    "; Pass probability when the agents is in quarantine\n"
+    "PASS_PR_QUARANTINE": "0.02"
 }
 
 config['incubation'] = {

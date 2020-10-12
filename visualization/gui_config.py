@@ -60,13 +60,13 @@ class GUI:
 
         self.initial_healthy_mask_label = ttk.Label(self.model_frame, text='Number of Healthy Agents Wear Face Masks:')
         self.initial_healthy_mask_label.grid(column=0, row=2, padx=8, pady=5, sticky="W")
-        self.initial_healthy_mask = tk.StringVar(value=40)
+        self.initial_healthy_mask = tk.StringVar(value=0)
         self.initial_healthy_mask_entry = ttk.Entry(self.model_frame, width=10, textvariable=self.initial_healthy_mask)
         self.initial_healthy_mask_entry.grid(column=1, row=2, padx=8, pady=5, sticky="W")
 
         self.initial_infected_mask_label = ttk.Label(self.model_frame, text='Number of Carriers Wear Face Masks:')
         self.initial_infected_mask_label.grid(column=0, row=3, padx=8, pady=5, sticky="W")
-        self.initial_infected_mask = tk.StringVar(value=2)
+        self.initial_infected_mask = tk.StringVar(value=0)
         self.initial_infected_mask_entry = ttk.Entry(self.model_frame, width=10,
                                                      textvariable=self.initial_infected_mask)
         self.initial_infected_mask_entry.grid(column=1, row=3, padx=8, pady=5, sticky="W")
@@ -97,7 +97,7 @@ class GUI:
 
         self.hospital_capacity_label = ttk.Label(self.model_frame, text='Hospital Capacity')
         self.hospital_capacity_label.grid(column=0, row=8, padx=8, pady=5, sticky='W')
-        self.hospital_capacity = tk.StringVar(value=20)
+        self.hospital_capacity = tk.StringVar(value=35)
         self.hospital_capacity_entry = ttk.Entry(self.model_frame, width=10, textvariable=self.hospital_capacity)
         self.hospital_capacity_entry.grid(column=1, row=8, padx=8, pady=5, sticky='W')
 
@@ -131,6 +131,13 @@ class GUI:
         self.pass_pr_both_off = tk.StringVar(value=0.95)
         self.pass_pr_both_off_entry = ttk.Entry(self.pass_pr_frame, width=10, textvariable=self.pass_pr_both_off)
         self.pass_pr_both_off_entry.grid(column=1, row=3, padx=8, pady=5, sticky='W')
+
+        self.pass_pr_quarantine_label = ttk.Label(self.pass_pr_frame,
+                                                  text='One Of The Agents Is Self-isolated:')
+        self.pass_pr_quarantine_label.grid(column=0, row=4, padx=8, pady=5, sticky="W")
+        self.pass_pr_quarantine = tk.StringVar(value=0.02)
+        self.pass_pr_quarantine_entry = ttk.Entry(self.pass_pr_frame, width=10, textvariable=self.pass_pr_quarantine)
+        self.pass_pr_quarantine_entry.grid(column=1, row=4, padx=8, pady=5, sticky='W')
 
         # Incubation and symptomatic label frame
         self.incubation_symptomatic_frame = ttk.LabelFrame(self.win, text='Incubation & Symptomatic')
@@ -364,7 +371,9 @@ class GUI:
             "; Pass probability when only the healthy contact wear masks\n"
             "PASS_PR_CONTACT_ON": self.pass_pr_contact_on.get(),
             "; Pass probability when both agents don't wear masks\n"
-            "PASS_PR_BOTH_OFF": self.pass_pr_both_off.get()
+            "PASS_PR_BOTH_OFF": self.pass_pr_both_off.get(),
+            "; Pass probability when the agents is in quarantine\n"
+            "PASS_PR_QUARANTINE": self.pass_pr_quarantine.get()
         }
 
         config['incubation'] = {

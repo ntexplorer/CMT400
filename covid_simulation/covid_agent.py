@@ -104,24 +104,31 @@ class CovidAgent(Agent):
             cellmates = self.model.grid.get_neighbors(self.pos, True)
             for cellmate in cellmates:
                 if not cellmate.has_immunity:
-                    if self.is_infected and not self.wear_mask:
-                        if not cellmate.wear_mask:
-                            if self.random.randint(0, 1000) <= \
-                                    (float(pass_probability['PASS_PR_BOTH_OFF']) * 1000):
-                                cellmate.is_infected = True
-                        else:
-                            if self.random.randint(0, 1000) <= \
-                                    (float(pass_probability['PASS_PR_CONTACT_ON']) * 1000):
-                                cellmate.is_infected = True
-                    elif self.is_infected and self.wear_mask:
-                        if not cellmate.wear_mask:
-                            if self.random.randint(0, 1000) <= \
-                                    (float(pass_probability['PASS_PR_CARRIER_ON']) * 1000):
-                                cellmate.is_infected = True
-                        else:
-                            if self.random.randint(0, 1000) <= \
-                                    (float(pass_probability['PASS_PR_BOTH_ON']) * 1000):
-                                cellmate.is_infected = True
+                    # the agent itself or the target agent is being self-isolated
+                    if self.is_infected and (self.social_distancing_toggle or cellmate.social_distancing_toggle):
+                        if self.random.randint(0, 1000) <= \
+                                (float(pass_probability['PASS_PR_QUARANTINE']) * 1000):
+                            cellmate.is_infected = True
+                    # both agents are not self-isolated
+                    else:
+                        if self.is_infected and not self.wear_mask:
+                            if not cellmate.wear_mask:
+                                if self.random.randint(0, 1000) <= \
+                                        (float(pass_probability['PASS_PR_BOTH_OFF']) * 1000):
+                                    cellmate.is_infected = True
+                            else:
+                                if self.random.randint(0, 1000) <= \
+                                        (float(pass_probability['PASS_PR_CONTACT_ON']) * 1000):
+                                    cellmate.is_infected = True
+                        elif self.is_infected and self.wear_mask:
+                            if not cellmate.wear_mask:
+                                if self.random.randint(0, 1000) <= \
+                                        (float(pass_probability['PASS_PR_CARRIER_ON']) * 1000):
+                                    cellmate.is_infected = True
+                            else:
+                                if self.random.randint(0, 1000) <= \
+                                        (float(pass_probability['PASS_PR_BOTH_ON']) * 1000):
+                                    cellmate.is_infected = True
 
     def get_infected(self):
         # infection toggle is to prevent from multiple info update

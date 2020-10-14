@@ -73,7 +73,7 @@ class GUI:
 
         self.mu_label = ttk.Label(self.model_frame, text='Mu of Age Distribution:')
         self.mu_label.grid(column=0, row=4, padx=8, pady=5, sticky="W")
-        self.mu = tk.StringVar(value=45)
+        self.mu = tk.StringVar(value=30)
         self.mu_entry = ttk.Entry(self.model_frame, width=10, textvariable=self.mu)
         self.mu_entry.grid(column=1, row=4, padx=8, pady=5, sticky="W")
 
@@ -270,29 +270,29 @@ class GUI:
         self.quarantine_frame = ttk.LabelFrame(self.win, text='Social Distancing Policy')
         self.quarantine_frame.grid(column=1, row=1, padx=7, pady=5)
 
-        self.quarantine_ratio_0_label = ttk.Label(self.quarantine_frame,
-                                                  text='Level 0 Ratio of Social-distancing Agents')
-        self.quarantine_ratio_0_label.grid(column=0, row=0, padx=8, pady=5, sticky='W')
-        self.quarantine_ratio_0 = tk.StringVar(value=0)
-        self.quarantine_ratio_0_entry = ttk.Entry(self.quarantine_frame, width=10,
-                                                  textvariable=self.quarantine_ratio_0)
-        self.quarantine_ratio_0_entry.grid(column=1, row=0, padx=8, pady=5, sticky='W')
+        self.quarantine_rate_0_label = ttk.Label(self.quarantine_frame,
+                                                 text='Level 0 Rate of Social-distancing Agents')
+        self.quarantine_rate_0_label.grid(column=0, row=0, padx=8, pady=5, sticky='W')
+        self.quarantine_rate_0 = tk.StringVar(value=0)
+        self.quarantine_rate_0_entry = ttk.Entry(self.quarantine_frame, width=10,
+                                                 textvariable=self.quarantine_rate_0)
+        self.quarantine_rate_0_entry.grid(column=1, row=0, padx=8, pady=5, sticky='W')
 
-        self.quarantine_ratio_1_label = ttk.Label(self.quarantine_frame,
-                                                  text='Level 1 Ratio of Social-distancing Agents')
-        self.quarantine_ratio_1_label.grid(column=0, row=1, padx=8, pady=5, sticky='W')
-        self.quarantine_ratio_1 = tk.StringVar(value=0.6)
-        self.quarantine_ratio_1_entry = ttk.Entry(self.quarantine_frame, width=10,
-                                                  textvariable=self.quarantine_ratio_1)
-        self.quarantine_ratio_1_entry.grid(column=1, row=1, padx=8, pady=5, sticky='W')
+        self.quarantine_rate_1_label = ttk.Label(self.quarantine_frame,
+                                                 text='Level 1 Rate of Social-distancing Agents')
+        self.quarantine_rate_1_label.grid(column=0, row=1, padx=8, pady=5, sticky='W')
+        self.quarantine_rate_1 = tk.StringVar(value=0.6)
+        self.quarantine_rate_1_entry = ttk.Entry(self.quarantine_frame, width=10,
+                                                 textvariable=self.quarantine_rate_1)
+        self.quarantine_rate_1_entry.grid(column=1, row=1, padx=8, pady=5, sticky='W')
 
-        self.quarantine_ratio_2_label = ttk.Label(self.quarantine_frame,
-                                                  text='Level 2 Ratio of Social-distancing Agents')
-        self.quarantine_ratio_2_label.grid(column=0, row=2, padx=8, pady=5, sticky='W')
-        self.quarantine_ratio_2 = tk.StringVar(value=0.9)
-        self.quarantine_ratio_2_entry = ttk.Entry(self.quarantine_frame, width=10,
-                                                  textvariable=self.quarantine_ratio_2)
-        self.quarantine_ratio_2_entry.grid(column=1, row=2, padx=8, pady=5, sticky='W')
+        self.quarantine_rate_2_label = ttk.Label(self.quarantine_frame,
+                                                 text='Level 2 Rate of Social-distancing Agents')
+        self.quarantine_rate_2_label.grid(column=0, row=2, padx=8, pady=5, sticky='W')
+        self.quarantine_rate_2 = tk.StringVar(value=0.9)
+        self.quarantine_rate_2_entry = ttk.Entry(self.quarantine_frame, width=10,
+                                                 textvariable=self.quarantine_rate_2)
+        self.quarantine_rate_2_entry.grid(column=1, row=2, padx=8, pady=5, sticky='W')
 
         self.level_1_threshold_label = ttk.Label(self.quarantine_frame,
                                                  text='Threshold For Agents To Start Level 1 Social-distancing Policy:')
@@ -421,14 +421,14 @@ class GUI:
         }
 
         config['quarantine_rate'] = {
-            "; The ratio of people who need to self-isolate\n"
-            '0': self.quarantine_ratio_0.get(),
-            '1': self.quarantine_ratio_1.get(),
-            '2': self.quarantine_ratio_2.get(),
+            "; The rate of people who need to self-isolate\n"
+            '0': self.quarantine_rate_0.get(),
+            '1': self.quarantine_rate_1.get(),
+            '2': self.quarantine_rate_2.get(),
         }
 
         config['quarantine_threshold'] = {
-            "; The threshold of the ratio of agents to start social-distancing policy\n"
+            "; The threshold of the rate of agents to start social-distancing policy\n"
             'level_1_threshold': self.level_1_threshold.get(),
             'level_2_threshold': self.level_2_threshold.get(),
         }

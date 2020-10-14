@@ -20,7 +20,7 @@ config['covid_model'] = {
     "; Number of infected agents who wear face masks\n"
     "K": "0",
     "; Mu of age distribution\n"
-    "MU": "45",
+    "MU": "30",
     "; Sigma of age distribution\n"
     "SIGMA": "15",
     "; Width of the grid\n"
@@ -92,14 +92,14 @@ config['immunity_loss'] = {
 }
 
 config['quarantine_rate'] = {
-    "; The ratio of people who need to self-isolate\n"
+    "; The rate of people who need to self-isolate\n"
     '0': '0',
     '1': '0.6',
     '2': '0.9',
 }
 
 config['quarantine_threshold'] = {
-    "; The threshold of the ratio of agents to start social-distancing policy\n"
+    "; The threshold of the rate of agents to start social-distancing policy\n"
     'level_1_threshold': '0.1',
     'level_2_threshold': '0.2',
 }

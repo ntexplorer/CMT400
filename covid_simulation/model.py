@@ -10,7 +10,6 @@ from covid_simulation.data_compute import *
 
 config = configparser.ConfigParser()
 config.read('../visualization/config.ini')
-default_setting = config['DEFAULT']
 quarantine_rate = config['quarantine_rate']
 quarantine_threshold = config['quarantine_threshold']
 
@@ -23,7 +22,8 @@ class CovidModel(Model):
     """
 
     def __init__(self, N: int, M: int, J: int, K: int, L: int, width, height,
-                 hospital_activated: bool, auto_social_distancing: bool):
+                 hospital_activated: bool, auto_social_distancing: bool,
+                 manual_quarantine_lvl: int):
         super().__init__()
         self.agent_number = N
         self.initial_infected = M
@@ -33,6 +33,7 @@ class CovidModel(Model):
         self.hospital_occupation = 0
         self.hospital_activated = hospital_activated
         self.auto_social_distancing = auto_social_distancing
+        self.manual_quarantine_lvl = manual_quarantine_lvl
         self.grid = SingleGrid(width, height, True)
         self.schedule = RandomActivation(self)
         self.schedule_end_steps = 0
@@ -144,7 +145,7 @@ class CovidModel(Model):
         if not self.quarantine_toggle:
             self.quarantine_toggle = 1
             quarantined_agent_length = round(len(self.agent_list)
-                                             * float(quarantine_rate[default_setting["manual_social_distancing_lvl"]]))
+                                             * float(quarantine_rate[str(self.manual_quarantine_lvl)]))
             self.quarantine_list = self.random.sample(self.agent_list, quarantined_agent_length)
             for agent in self.quarantine_list:
                 agent.social_distancing_toggle = True

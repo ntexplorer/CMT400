@@ -38,6 +38,7 @@ class CovidModel(Model):
         self.schedule = RandomActivation(self)
         self.schedule_end_steps = 0
         self.schedule_end_flag = False
+        self.highest_morbidity_rate = 0
         self.running = True
         self.agent_list = []
         self.symptomatic_list = []
@@ -85,6 +86,7 @@ class CovidModel(Model):
         self.data_collector.collect(self)
         self.schedule.step()
         self.get_end_time()
+        self.get_highest_morbidity_rate()
 
     # A function to check if all agents are not infected
     def check_all_agents(self):
@@ -149,3 +151,13 @@ class CovidModel(Model):
             self.quarantine_list = self.random.sample(self.agent_list, quarantined_agent_length)
             for agent in self.quarantine_list:
                 agent.social_distancing_toggle = True
+
+    def get_highest_morbidity_rate(self):
+        morbidity_list = []
+        for agent in self.agent_list:
+            if agent.is_infected:
+                morbidity_list.append(agent)
+        H = len(morbidity_list)
+        morbidity_rate = H / self.agent_number
+        if morbidity_rate > self.highest_morbidity_rate:
+            self.highest_morbidity_rate = morbidity_rate

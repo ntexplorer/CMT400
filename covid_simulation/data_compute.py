@@ -58,3 +58,7 @@ def get_step_number(model):
         return model.schedule_end_steps
     else:
         return 300
+
+
+def get_highest_morbidity_rate(model):
+    return model.highest_morbidity_rate

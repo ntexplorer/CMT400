@@ -20,27 +20,28 @@ class GUI:
         self.hospital_rad_2 = tk.Radiobutton(self.default_frame, text='No', variable=self.hospital_toggle, value=0)
         self.hospital_rad_2.grid(column=2, row=0, padx=8, pady=5, sticky="W")
 
-        self.social_toggle_label = ttk.Label(self.default_frame, text='Activate Automatic Social Distancing Policy:')
-        self.social_toggle_label.grid(column=0, row=1, sticky='W')
-        self.social_toggle = tk.IntVar()
-        self.social_rad_1 = tk.Radiobutton(self.default_frame, text='Yes', variable=self.social_toggle, value=1)
-        self.social_rad_1.grid(column=1, row=1, padx=8, pady=5, sticky="W")
-        self.social_rad_2 = tk.Radiobutton(self.default_frame, text='No', variable=self.social_toggle, value=0)
-        self.social_rad_2.grid(column=2, row=1, padx=8, pady=5, sticky="W")
+        self.isolation_toggle_label = ttk.Label(self.default_frame, text='Activate Automatic self-isolation Policy:')
+        self.isolation_toggle_label.grid(column=0, row=1, sticky='W')
+        self.isolation_toggle = tk.IntVar()
+        self.isolation_rad_1 = tk.Radiobutton(self.default_frame, text='Yes', variable=self.isolation_toggle, value=1)
+        self.isolation_rad_1.grid(column=1, row=1, padx=8, pady=5, sticky="W")
+        self.isolation_rad_2 = tk.Radiobutton(self.default_frame, text='No', variable=self.isolation_toggle, value=0)
+        self.isolation_rad_2.grid(column=2, row=1, padx=8, pady=5, sticky="W")
 
-        self.manual_social_label = ttk.Label(self.default_frame, text='Manually Set Social Distancing Level:')
-        self.manual_social_label.grid(column=0, row=2, stick='W')
-        self.manual_social_lvl = tk.StringVar()
-        self.manual_social_selected = ttk.Combobox(self.default_frame, width=5, textvariable=self.manual_social_lvl,
-                                                   state='readonly')
-        self.manual_social_selected['values'] = ('0', '1', '2')
-        self.manual_social_selected.grid(column=1, row=2, padx=8, pady=5, sticky="W")
-        self.manual_social_selected.current(0)
+        self.manual_isolation_label = ttk.Label(self.default_frame, text='Manually Set self-isolation Level:')
+        self.manual_isolation_label.grid(column=0, row=2, stick='W')
+        self.manual_isolation_lvl = tk.StringVar()
+        self.manual_isolation_selected = ttk.Combobox(self.default_frame, width=5,
+                                                      textvariable=self.manual_isolation_lvl,
+                                                      state='readonly')
+        self.manual_isolation_selected['values'] = ('0', '1', '2')
+        self.manual_isolation_selected.grid(column=1, row=2, padx=8, pady=5, sticky="W")
+        self.manual_isolation_selected.current(0)
 
-        self.manual_social_comment_label = ttk.Label(self.default_frame,
-                                                     text='(This setting is only activated when auto '
-                                                          'social-distancing policy is switched off)')
-        self.manual_social_comment_label.grid(column=0, row=3, stick='W')
+        self.manual_isolation_comment_label = ttk.Label(self.default_frame,
+                                                        text='(This setting is only activated when auto '
+                                                             'self-isolation policy is switched off)')
+        self.manual_isolation_comment_label.grid(column=0, row=3, stick='W')
 
         # Model Settings Label Frame
         self.model_frame = ttk.LabelFrame(self.win, text='Model Settings')
@@ -266,12 +267,12 @@ class GUI:
                                                  textvariable=self.immunity_loss_max)
         self.immunity_loss_max_entry.grid(column=1, row=2, padx=8, pady=5, sticky='W')
 
-        # Social_distancing policy label frame
-        self.quarantine_frame = ttk.LabelFrame(self.win, text='Social Distancing Policy')
+        # self_isolation policy label frame
+        self.quarantine_frame = ttk.LabelFrame(self.win, text='self-isolation Policy')
         self.quarantine_frame.grid(column=1, row=1, padx=7, pady=5)
 
         self.quarantine_rate_0_label = ttk.Label(self.quarantine_frame,
-                                                 text='Level 0 Rate of Social-distancing Agents')
+                                                 text='Level 0 Rate of self-isolation Agents')
         self.quarantine_rate_0_label.grid(column=0, row=0, padx=8, pady=5, sticky='W')
         self.quarantine_rate_0 = tk.StringVar(value=0)
         self.quarantine_rate_0_entry = ttk.Entry(self.quarantine_frame, width=10,
@@ -279,7 +280,7 @@ class GUI:
         self.quarantine_rate_0_entry.grid(column=1, row=0, padx=8, pady=5, sticky='W')
 
         self.quarantine_rate_1_label = ttk.Label(self.quarantine_frame,
-                                                 text='Level 1 Rate of Social-distancing Agents')
+                                                 text='Level 1 Rate of self-isolation Agents')
         self.quarantine_rate_1_label.grid(column=0, row=1, padx=8, pady=5, sticky='W')
         self.quarantine_rate_1 = tk.StringVar(value=0.6)
         self.quarantine_rate_1_entry = ttk.Entry(self.quarantine_frame, width=10,
@@ -287,7 +288,7 @@ class GUI:
         self.quarantine_rate_1_entry.grid(column=1, row=1, padx=8, pady=5, sticky='W')
 
         self.quarantine_rate_2_label = ttk.Label(self.quarantine_frame,
-                                                 text='Level 2 Rate of Social-distancing Agents')
+                                                 text='Level 2 Rate of self-isolation Agents')
         self.quarantine_rate_2_label.grid(column=0, row=2, padx=8, pady=5, sticky='W')
         self.quarantine_rate_2 = tk.StringVar(value=0.9)
         self.quarantine_rate_2_entry = ttk.Entry(self.quarantine_frame, width=10,
@@ -295,7 +296,7 @@ class GUI:
         self.quarantine_rate_2_entry.grid(column=1, row=2, padx=8, pady=5, sticky='W')
 
         self.level_1_threshold_label = ttk.Label(self.quarantine_frame,
-                                                 text='Threshold For Agents To Start Level 1 Social-distancing Policy:')
+                                                 text='Threshold For Agents To Start Level 1 self-isolation Policy:')
         self.level_1_threshold_label.grid(column=0, row=3, padx=8, pady=5, sticky='W')
         self.level_1_threshold = tk.StringVar(value=0.1)
         self.level_1_threshold_entry = ttk.Entry(self.quarantine_frame, width=10,
@@ -303,7 +304,7 @@ class GUI:
         self.level_1_threshold_entry.grid(column=1, row=3, padx=8, pady=5, sticky='W')
 
         self.level_2_threshold_label = ttk.Label(self.quarantine_frame,
-                                                 text='Threshold For Agents To Start Level 2 Social-distancing Policy:')
+                                                 text='Threshold For Agents To Start Level 2 self-isolation Policy:')
         self.level_2_threshold_label.grid(column=0, row=4, padx=8, pady=5, sticky='W')
         self.level_2_threshold = tk.StringVar(value=0.2)
         self.level_2_threshold_entry = ttk.Entry(self.quarantine_frame, width=10,
@@ -334,10 +335,10 @@ class GUI:
         config['DEFAULT'] = {
             "; Toggle to activate hospital\n"
             "activate_hospital": self.hospital_toggle.get(),
-            "; If auto mode is off, set the social-distancing level below (0-2) manually\n"
-            "manual_social_distancing_lvl": self.manual_social_lvl.get(),
-            "; Toggle to activate auto-social-distancing\n"
-            "activate_automatic_mode": self.social_toggle.get()
+            "; If auto mode is off, set the self-isolation level below (0-2) manually\n"
+            "manual_self_isolation_lvl": self.manual_isolation_lvl.get(),
+            "; Toggle to activate auto-self-isolation\n"
+            "activate_automatic_mode": self.isolation_toggle.get()
         }
         config['covid_model'] = {
             "; Number of agents\n"
@@ -428,7 +429,7 @@ class GUI:
         }
 
         config['quarantine_threshold'] = {
-            "; The threshold of the rate of agents to start social-distancing policy\n"
+            "; The threshold of the rate of agents to start self-isolation policy\n"
             'level_1_threshold': self.level_1_threshold.get(),
             'level_2_threshold': self.level_2_threshold.get(),
         }

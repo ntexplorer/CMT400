@@ -34,7 +34,7 @@ class CovidAgent(Agent):
         self.immunity_loss_rate = 0
         self.immunity_countdown = -1
         self.immunity_loss_toggle = False
-        self.social_distancing_toggle = False
+        self.self_isolation_toggle = False
 
     def set_age(self):
         while True:
@@ -48,7 +48,7 @@ class CovidAgent(Agent):
         if not self.is_dead:
             self.hospital_treatment()
             self.check_quarantine_status()
-            if not self.social_distancing_toggle:
+            if not self.self_isolation_toggle:
                 self.move()
             self.pass_covid()
             self.get_infected()
@@ -59,7 +59,7 @@ class CovidAgent(Agent):
 
     # check if auto quarantine change mode is on, if not switch to manual mode
     def check_quarantine_status(self):
-        if self.model.auto_social_distancing:
+        if self.model.auto_self_isolation:
             self.model.auto_quarantine_get_symptomatic_rate()
             self.model.auto_quarantine_update_quarantine_list()
         else:
@@ -105,7 +105,7 @@ class CovidAgent(Agent):
             for cellmate in cellmates:
                 if not cellmate.has_immunity:
                     # the agent itself or the target agent is being self-isolated
-                    if self.is_infected and (self.social_distancing_toggle or cellmate.social_distancing_toggle):
+                    if self.is_infected and (self.self_isolation_toggle or cellmate.self_isolation_toggle):
                         if self.random.randint(0, 1000) <= \
                                 (float(pass_probability['PASS_PR_QUARANTINE']) * 1000):
                             cellmate.is_infected = True

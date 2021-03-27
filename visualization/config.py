@@ -4,9 +4,9 @@ config = configparser.ConfigParser()
 config['DEFAULT'] = {
     "; Toggle to activate hospital\n"
     "activate_hospital": "true",
-    "; If auto mode is off, set the social-distancing level below (0-2) manually\n"
-    "manual_social_distancing_lvl": '0',
-    "; Toggle to activate auto-social-distancing\n"
+    "; If auto mode is off, set the self-isolation level below (0-2) manually\n"
+    "manual_self_isolation_lvl": '0',
+    "; Toggle to activate auto-self-isolation\n"
     "activate_automatic_mode": "true"
 }
 
@@ -99,7 +99,7 @@ config['quarantine_rate'] = {
 }
 
 config['quarantine_threshold'] = {
-    "; The threshold of the rate of agents to start social-distancing policy\n"
+    "; The threshold of the rate of agents to start self-isolation policy\n"
     'level_1_threshold': '0.1',
     'level_2_threshold': '0.2',
 }

@@ -55,7 +55,7 @@ server = ModularServer(CovidModel,
                         "width": int(covid_model['width']),
                         "height": int(covid_model['height']),
                         "hospital_activated": int(default_setting['activate_hospital']),
-                        "auto_social_distancing": int(default_setting['activate_automatic_mode']),
-                        "manual_quarantine_lvl": int(default_setting['manual_social_distancing_lvl'])})
+                        "auto_self_isolation": int(default_setting['activate_automatic_mode']),
+                        "manual_self_isolation_lvl": int(default_setting['manual_self_isolation_lvl'])})
 server.port = 8521  # The default
 server.launch()
